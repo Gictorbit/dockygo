@@ -1,0 +1,18 @@
+image:
+  name: dockygo-api
+  username: dockygo
+  type: service #[service,migration]
+  env:
+    COMPANY_HOST: "github.com/dolphinfms"
+  settings:
+    compress: true
+    cache: false
+    http_proxy:
+    https_proxy:
+    no_proxy:
+  golang:
+    proxy: global #[golang,global,china] default:global
+    version: 1.19 #default: current installed version
+registries:
+  - name: local
+    url: dockygo.local
