@@ -1,9 +1,8 @@
 image:
   name: dockygo-api
   username: dockygo
-  type: service #[service,migration]
-  env:
-    COMPANY_HOST: "github.com/dolphinfms"
+  environment:
+    COMPANY_HOST: "github.com/dockygo"
   settings:
     compress: true
     cache: false
