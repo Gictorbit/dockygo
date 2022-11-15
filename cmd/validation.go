@@ -166,7 +166,7 @@ func ValidateRelease(config *DockerImageConfigFile, cmd *ReleaseCommand) error {
 	return nil
 }
 func GetRepoTagVersion() string {
-	args1 := []string{"describe", "--tags", "--exact-match", "2>/dev/null"}
+	args1 := []string{"describe", "--tags", "--exact-match"}
 	args2 := []string{"symbolic-ref", "-q", "--short", "HEAD"}
 	output, err := exec.Command("git", args1...).Output()
 	if err == nil && len(string(output)) > 0 {
