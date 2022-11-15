@@ -5,7 +5,7 @@ ARG BUILD_DATE="notset"
 ARG HTTP_PROXY=""
 ARG HTTPS_PROXY=""
 ARG NO_PROXY=""
-ARG MIGRATION_NAME="notset"
+ARG IMAGE_NAME="notset"
 
 FROM migrate/migrate:latest AS migrate
 # set proxies
@@ -24,7 +24,7 @@ ARG COMPRESS
 RUN if [ "$COMPRESS" = "true" ] ;then upx --best --lzma /usr/local/bin/migrate;fi
 
 FROM scratch AS final
-ARG MIGRATION_NAME
+ARG IMAGE_NAME
 ARG VERSION
 ARG BUILD_DATE
 
@@ -32,7 +32,7 @@ WORKDIR /sql
 COPY "./sql" .
 LABEL migration.build.version="${VERSION}"
 LABEL migration.build.date="${BUILD_DATE}"
-LABEL migration.name="${MIGRATION_NAME}"
+LABEL migration.name="${IMAGE_NAME}"
 
 WORKDIR /app
 COPY --from=migrate /usr/local/bin/migrate .

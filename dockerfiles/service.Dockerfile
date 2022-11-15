@@ -9,7 +9,7 @@ ARG GITHUB_TOKEN
 ARG HTTP_PROXY=""
 ARG HTTPS_PROXY=""
 ARG NO_PROXY=""
-ARG SERVICE_NAME=""
+ARG IMAGE_NAME=""
 
 FROM golang:${GO_VERSION}-alpine AS builder
 # set proxies
@@ -49,7 +49,7 @@ RUN mkdir -p /final && \
 FROM scratch AS final
 ARG VERSION
 ARG BUILD_DATE
-ARG SERVICE_NAME
+ARG IMAGE_NAME
 
 WORKDIR /production
 COPY --from=builder /final .
@@ -59,6 +59,6 @@ COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
 
 LABEL service.build.version="${VERSION}"
 LABEL service.build.date="${BUILD_DATE}"
-LABEL service.name="${SERVICE_NAME}"
+LABEL service.name="${IMAGE_NAME}"
 
 ENTRYPOINT ["./service"]
