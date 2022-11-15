@@ -29,8 +29,8 @@ var (
 )
 
 type GolangOpts struct {
-	Version string  `yaml:"version"`
-	Proxy   GOProxy `yaml:"proxy"`
+	Version string  `yaml:"version,omitempty"`
+	Proxy   GOProxy `yaml:"proxy,omitempty"`
 }
 type Registry struct {
 	Name string `yaml:"name"`
@@ -38,24 +38,26 @@ type Registry struct {
 }
 
 type ImageSettings struct {
-	Compress   bool   `yaml:"compress"`
-	Cache      bool   `yaml:"cache"`
-	HTTPProxy  string `yaml:"http_proxy"`
-	HTTPSProxy string `yaml:"https_proxy"`
-	NOProxy    string `yaml:"no_proxy"`
-	Latest     bool   `yaml:"latest"`
+	Compress   bool   `yaml:"compress,omitempty"`
+	Cache      bool   `yaml:"cache,omitempty"`
+	HTTPProxy  string `yaml:"http_proxy,omitempty"`
+	HTTPSProxy string `yaml:"https_proxy,omitempty"`
+	NOProxy    string `yaml:"no_proxy,omitempty"`
+	Latest     bool   `yaml:"latest,omitempty"`
 }
 type ImageConfig struct {
-	Name        string            `yaml:"name"`
-	UserName    string            `yaml:"username"`
-	Environment map[string]string `yaml:"environment"`
-	Settings    ImageSettings     `yaml:"settings"`
-	Golang      GolangOpts        `yaml:"golang"`
+	Name        string            `yaml:"name,omitempty"`
+	UserName    string            `yaml:"username,omitempty"`
+	Environment map[string]string `yaml:"environment,omitempty"`
+	Settings    ImageSettings     `yaml:"settings,omitempty"`
+	Golang      GolangOpts        `yaml:"golang,omitempty"`
 }
 
 type DockerImageConfigFile struct {
-	Registries    []Registry  `yaml:"registries"`
-	ImageSettings ImageConfig `yaml:"image"`
+	RemoteAddr    string
+	Tags          []string
+	Registries    []Registry  `yaml:"registries,omitempty"`
+	ImageSettings ImageConfig `yaml:"image,omitempty"`
 }
 
 func ReadYamlConfigFile(path string) (*DockerImageConfigFile, error) {
