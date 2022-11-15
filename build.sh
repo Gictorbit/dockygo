@@ -1,0 +1,3 @@
+#! /usr/bin/env bash
+echo "build app..."
+go build -ldflags="-X main.version=1.0.0" -o ./build/dockygo ./cmd/...

@@ -3,8 +3,10 @@ image:
   username: dockygo
   environment:
     COMPANY_HOST: "github.com/dockygo"
+    GITHUB_TOKEN: "${GITHUB_TOKEN}"
   settings:
     compress: true
+    latest: true
     cache: false
     http_proxy:
     https_proxy:
