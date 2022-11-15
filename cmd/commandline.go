@@ -62,7 +62,7 @@ func MakeCommandLine() *DockyGoCmd {
 
 	releaseCmd := &ReleaseCommand{Command: releaseCommand}
 	releaseCommand.Flag("tags", "release image tags").Short('t').StringsVar(&releaseCmd.Tags)
-	releaseCommand.Flag("latest", "release latest tag for image").Short('l').Default("true").BoolVar(&releaseCmd.LatestTag)
+	releaseCommand.Flag("latest", "release latest tag for image").Short('l').Default("false").BoolVar(&releaseCmd.LatestTag)
 	releaseCommand.Flag("name", "name of image").Short('n').StringVar(&releaseCmd.ImageName)
 	releaseCommand.Flag("registry", "name or url of registry").Short('r').Required().StringVar(&releaseCmd.ImageName)
 	releaseCommand.Flag("user", "registry username").Short('u').StringVar(&releaseCmd.UserName)

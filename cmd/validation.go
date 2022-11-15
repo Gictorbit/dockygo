@@ -76,8 +76,8 @@ func ValidateBuild(config *DockerImageConfigFile, cmd *BuildCommand) error {
 		config.ImageSettings.Settings.Cache = true
 	}
 	//validate latest
-	if cmd.LatestTag == false {
-		config.ImageSettings.Settings.Latest = false
+	if cmd.LatestTag {
+		config.ImageSettings.Settings.Latest = true
 	}
 	//validate go version
 	if len(config.ImageSettings.Golang.Version) == 0 && len(cmd.GoVersion) > 0 ||
