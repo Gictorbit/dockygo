@@ -30,8 +30,8 @@ func main() {
 		dockerOpts := DockerBuildOptions{
 			BuildX:     true,
 			Tags:       yamlConfig.Tags,
-			RemoteAddr: GetFullTag(yamlConfig),
-			Dockerfile: *dockyGoCmd.BuildCMD.DockerFile,
+			RemoteAddr: GetFullRemoteAddr(yamlConfig),
+			Dockerfile: dockyGoCmd.BuildCMD.DockerFile,
 			Cache:      yamlConfig.ImageSettings.Settings.Cache,
 			BuildArg:   yamlConfig.ImageSettings.Environment,
 		}

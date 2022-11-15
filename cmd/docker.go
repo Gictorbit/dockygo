@@ -52,19 +52,32 @@ func BuildDockerImage(opts DockerBuildOptions) error {
 	return nil
 }
 
-func GetFullTag(config *DockerImageConfigFile) string {
+func GetFullRemoteAddr(config *DockerImageConfigFile) string {
 	return fmt.Sprintf("%s/%s/%s", config.RemoteAddr, config.ImageSettings.UserName, config.ImageSettings.Name)
 }
 
 func PrintBuildConfig(config *DockerImageConfigFile) {
-	log.Printf("remoteAddr: %s\n", config.RemoteAddr)
-	log.Printf("image name: %s\n", config.ImageSettings.Name)
-	log.Printf("compress: %v\n", config.ImageSettings.Settings.Compress)
-	log.Printf("cache: %v\n", config.ImageSettings.Settings.Cache)
-	log.Printf("go version: %s\n", config.ImageSettings.Golang.Version)
-	log.Printf("tags: %v\n", config.Tags)
+	infos := map[string]any{
+		"RemoteAddr": config.RemoteAddr,
+		"Username":   config.ImageSettings.UserName,
+		"ImageName":  config.ImageSettings.Name,
+		"Compress":   config.ImageSettings.Settings.Compress,
+		"Cache":      config.ImageSettings.Settings.Cache,
+		"GoVersion":  config.ImageSettings.Golang.Version,
+		"Tags":       config.Tags,
+		"HTTPProxy":  config.ImageSettings.Settings.HTTPProxy,
+		"HTTPSProxy": config.ImageSettings.Settings.HTTPSProxy,
+		"NOProxy":    config.ImageSettings.Settings.NOProxy,
+	}
+	for key, value := range infos {
+		log.Printf("%v:\t%v\n", key, value)
+	}
 	log.Println("environments:")
 	for key, value := range config.ImageSettings.Environment {
 		fmt.Printf("\t%s: %s\n", key, value)
+	}
+	log.Println("images:")
+	for _, tag := range config.Tags {
+		fmt.Printf("\t%s:%s\n", GetFullRemoteAddr(config), tag)
 	}
 }

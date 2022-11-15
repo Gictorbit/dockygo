@@ -18,21 +18,21 @@ var (
 
 func ValidateBuild(config *DockerImageConfigFile, cmd *BuildCommand) error {
 	//validate imageName
-	if len(*cmd.ImageName) > 0 {
-		config.ImageSettings.Name = *cmd.ImageName
+	if len(cmd.ImageName) > 0 {
+		config.ImageSettings.Name = cmd.ImageName
 	}
 	if len(config.ImageSettings.Name) == 0 {
 		return ErrInvalidImageName
 	}
 	//validate username
-	if len(*cmd.UserName) > 0 {
-		config.ImageSettings.UserName = *cmd.UserName
+	if len(cmd.UserName) > 0 {
+		config.ImageSettings.UserName = cmd.UserName
 	}
 	if len(config.ImageSettings.UserName) == 0 {
 		return ErrInvalidUserName
 	}
 	for _, reg := range config.Registries {
-		if reg.Name != *cmd.Registry {
+		if reg.Name != cmd.Registry {
 			continue
 		}
 
@@ -42,55 +42,56 @@ func ValidateBuild(config *DockerImageConfigFile, cmd *BuildCommand) error {
 		config.ImageSettings.Golang.Proxy = GolangProxy
 	}
 	_, configOk := GoProxyServers[config.ImageSettings.Golang.Proxy]
-	_, inputOk := GoProxyServers[GOProxy(*cmd.GoProxy)]
+	_, inputOk := GoProxyServers[GOProxy(cmd.GoProxy)]
 	if !inputOk || !configOk {
 		return ErrInvalidGoProxy
 	}
-	if GOProxy(*cmd.GoProxy) != GolangProxy {
-		config.ImageSettings.Golang.Proxy = GOProxy(*cmd.GoProxy)
+	if GOProxy(cmd.GoProxy) != GolangProxy {
+		config.ImageSettings.Golang.Proxy = GOProxy(cmd.GoProxy)
 	}
 	//validate registry
 	for _, reg := range config.Registries {
-		if reg.Name == *cmd.Registry {
+		if reg.Name == cmd.Registry {
 			config.RemoteAddr = reg.URL
 		}
 	}
 	if len(config.RemoteAddr) == 0 {
-		config.RemoteAddr = *cmd.Registry
+		config.RemoteAddr = cmd.Registry
 	}
 	//validate compress
-	if *cmd.Compress == true {
+	if cmd.Compress == true {
 		config.ImageSettings.Settings.Compress = true
 	}
 	//validate http proxy
-	if len(*cmd.HTTPProxy) > 0 {
-		config.ImageSettings.Settings.HTTPProxy = *cmd.HTTPProxy
+	if len(cmd.HTTPProxy) > 0 {
+		config.ImageSettings.Settings.HTTPProxy = cmd.HTTPProxy
 	}
-	if len(*cmd.HTTPSProxy) > 0 {
-		config.ImageSettings.Settings.HTTPSProxy = *cmd.HTTPSProxy
+	if len(cmd.HTTPSProxy) > 0 {
+		config.ImageSettings.Settings.HTTPSProxy = cmd.HTTPSProxy
 	}
-	if len(*cmd.NOProxy) > 0 {
-		config.ImageSettings.Settings.NOProxy = *cmd.NOProxy
+	if len(cmd.NOProxy) > 0 {
+		config.ImageSettings.Settings.NOProxy = cmd.NOProxy
 	}
-	if *cmd.Cache == true {
+	if cmd.Cache == true {
 		config.ImageSettings.Settings.Cache = true
 	}
 	//validate latest
-	if *cmd.LatestTag == false {
+	if cmd.LatestTag == false {
 		config.ImageSettings.Settings.Latest = false
 	}
 	//validate go version
-	if len(config.ImageSettings.Golang.Version) == 0 && len(*cmd.GoVersion) > 0 {
-		config.ImageSettings.Golang.Version = *cmd.GoVersion
+	if len(config.ImageSettings.Golang.Version) == 0 && len(cmd.GoVersion) > 0 ||
+		len(cmd.GoVersion) > 0 && cmd.GoVersion != GetGoVersion() {
+		config.ImageSettings.Golang.Version = cmd.GoVersion
 	}
 	if len(config.ImageSettings.Golang.Version) == 0 {
 		return ErrInvalidGoVersion
 	}
 	// validate tags
-	for _, tg := range *cmd.Tags {
+	for _, tg := range cmd.Tags {
 		config.Tags = append(config.Tags, tg)
 	}
-	if gitVersion := GetRepoTagVersion(); len(gitVersion) > 0 && len(*cmd.Tags) == 0 {
+	if gitVersion := GetRepoTagVersion(); len(gitVersion) > 0 && len(cmd.Tags) == 0 {
 		config.Tags = append(config.Tags, gitVersion)
 	}
 	if config.ImageSettings.Settings.Latest {
