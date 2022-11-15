@@ -107,7 +107,7 @@ func AddBuildArgs(config *DockerImageConfigFile) {
 	config.ImageSettings.Environment["COMPRESS"] = strconv.FormatBool(config.ImageSettings.Settings.Compress)
 	config.ImageSettings.Environment["USERNAME"] = config.ImageSettings.UserName
 	config.ImageSettings.Environment["IMAGE_NAME"] = config.ImageSettings.Name
-
+	config.ImageSettings.Environment["GOPROXYURL"] = GoProxyServers[config.ImageSettings.Golang.Proxy]
 	if len(config.ImageSettings.Settings.NOProxy) > 0 {
 		config.ImageSettings.Environment["NO_PROXY"] = config.ImageSettings.Settings.NOProxy
 	}
