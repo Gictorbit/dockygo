@@ -58,7 +58,7 @@ func MakeCommandLine() *DockyGoCmd {
 	buildCommand.Flag("cache", "enable docker cache").Default("false").BoolVar(&buildCmd.Cache)
 	buildCommand.Flag("goversion", "specify go version").Default(GetGoVersion()).StringVar(&buildCmd.GoVersion)
 	buildCommand.Flag("tags", "docker image tags").Short('t').StringsVar(&buildCmd.Tags)
-	buildCommand.Flag("latest", "build latest tag for image").Short('l').Default("true").BoolVar(&buildCmd.LatestTag)
+	buildCommand.Flag("latest", "build latest tag for image").Short('l').Default("false").BoolVar(&buildCmd.LatestTag)
 
 	releaseCmd := &ReleaseCommand{Command: releaseCommand}
 	releaseCommand.Flag("tags", "release image tags").Short('t').StringsVar(&releaseCmd.Tags)

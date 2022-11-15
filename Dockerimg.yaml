@@ -6,7 +6,7 @@ image:
     GITHUB_TOKEN: "${GITHUB_TOKEN}"
   settings:
     compress: true
-    latest: true
+    latest: false
     cache: false
     http_proxy:
     https_proxy:
