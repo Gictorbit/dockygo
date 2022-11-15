@@ -88,10 +88,10 @@ func ValidateBuild(config *DockerImageConfigFile, cmd *BuildCommand) error {
 		return ErrInvalidGoVersion
 	}
 	// validate tags
-	for _, tg := range cmd.Tags {
-		config.Tags = append(config.Tags, tg)
+	if len(cmd.Tag) > 0 {
+		config.Tags = append(config.Tags, cmd.Tag)
 	}
-	if gitVersion := GetRepoTagVersion(); len(gitVersion) > 0 && len(cmd.Tags) == 0 {
+	if gitVersion := GetRepoTagVersion(); len(gitVersion) > 0 && len(cmd.Tag) == 0 {
 		config.Tags = append(config.Tags, gitVersion)
 	}
 	if config.ImageSettings.Settings.Latest {

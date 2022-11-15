@@ -20,7 +20,7 @@ type BuildCommand struct {
 	NOProxy    string
 	Cache      bool
 	GoVersion  string
-	Tags       []string
+	Tag        string
 	LatestTag  bool
 }
 
@@ -30,7 +30,7 @@ type ReleaseCommand struct {
 	Registry  string
 	UserName  string
 	LatestTag bool
-	Tags      []string
+	Tag       string
 }
 
 type DockyGoCmd struct {
@@ -57,11 +57,11 @@ func MakeCommandLine() *DockyGoCmd {
 	buildCommand.Flag("no-proxy", "set no proxy").Envar("no_proxy").StringVar(&buildCmd.NOProxy)
 	buildCommand.Flag("cache", "enable docker cache").Default("false").BoolVar(&buildCmd.Cache)
 	buildCommand.Flag("goversion", "specify go version").Default(GetGoVersion()).StringVar(&buildCmd.GoVersion)
-	buildCommand.Flag("tags", "docker image tags").Short('t').StringsVar(&buildCmd.Tags)
+	buildCommand.Flag("tag", "docker image tag").Short('t').StringVar(&buildCmd.Tag)
 	buildCommand.Flag("latest", "build latest tag for image").Short('l').Default("false").BoolVar(&buildCmd.LatestTag)
 
 	releaseCmd := &ReleaseCommand{Command: releaseCommand}
-	releaseCommand.Flag("tags", "release image tags").Short('t').StringsVar(&releaseCmd.Tags)
+	releaseCommand.Flag("tag", "release image tag").Short('t').StringVar(&releaseCmd.Tag)
 	releaseCommand.Flag("latest", "release latest tag for image").Short('l').Default("false").BoolVar(&releaseCmd.LatestTag)
 	releaseCommand.Flag("name", "name of image").Short('n').StringVar(&releaseCmd.ImageName)
 	releaseCommand.Flag("registry", "name or url of registry").Short('r').Required().StringVar(&releaseCmd.ImageName)
