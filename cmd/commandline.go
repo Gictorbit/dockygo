@@ -64,7 +64,7 @@ func MakeCommandLine() *DockyGoCmd {
 	releaseCommand.Flag("tag", "release image tag").Short('t').Default(gitTag).StringVar(&releaseCmd.Tag)
 	releaseCommand.Flag("latest", "release latest tag for image").Short('l').Default("false").BoolVar(&releaseCmd.LatestTag)
 	releaseCommand.Flag("name", "name of image").Short('n').StringVar(&releaseCmd.ImageName)
-	releaseCommand.Flag("registry", "name or url of registry").Short('r').Required().StringVar(&releaseCmd.ImageName)
+	releaseCommand.Flag("registry", "name or url of registry").Short('r').Required().StringVar(&releaseCmd.Registry)
 	releaseCommand.Flag("user", "registry username").Short('u').StringVar(&releaseCmd.UserName)
 
 	return &DockyGoCmd{

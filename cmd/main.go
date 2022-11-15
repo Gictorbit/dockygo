@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	clipkg "gopkg.in/alecthomas/kingpin.v2"
 	"log"
 	"os"
@@ -38,8 +37,17 @@ func main() {
 		if err := BuildDockerImage(dockerOpts); err != nil {
 			log.Fatal(err)
 		}
-
 	case dockyGoCmd.ReleaseCMD.Command.FullCommand():
-		fmt.Printf("%+v\n", dockyGoCmd.ReleaseCMD)
+		if err := ValidateRelease(yamlConfig, dockyGoCmd.ReleaseCMD); err != nil {
+			log.Fatal(err)
+		}
+		PrintReleaseConfig(yamlConfig)
+		dockerOpts := DockerReleaseOptions{
+			Tags:       yamlConfig.Tags,
+			RemoteAddr: GetFullRemoteAddr(yamlConfig),
+		}
+		if err := PushDockerImage(dockerOpts); err != nil {
+			log.Fatal(err)
+		}
 	}
 }

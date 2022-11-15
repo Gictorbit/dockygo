@@ -15,6 +15,10 @@ type DockerBuildOptions struct {
 	Dockerfile string
 	Cache      bool
 }
+type DockerReleaseOptions struct {
+	Tags       []string
+	RemoteAddr string
+}
 
 func (dbo *DockerBuildOptions) BuildCommand() *exec.Cmd {
 	flags := make([]string, 0)
@@ -80,4 +84,36 @@ func PrintBuildConfig(config *DockerImageConfigFile) {
 	for _, tag := range config.Tags {
 		fmt.Printf("\t%s:%s\n", GetFullRemoteAddr(config), tag)
 	}
+}
+
+func PrintReleaseConfig(config *DockerImageConfigFile) {
+	infos := map[string]any{
+		"RemoteAddr": config.RemoteAddr,
+		"Username":   config.ImageSettings.UserName,
+		"ImageName":  config.ImageSettings.Name,
+		"Tags":       config.Tags,
+	}
+	for key, value := range infos {
+		log.Printf("%v:\t%v\n", key, value)
+	}
+	log.Println("images:")
+	for _, tag := range config.Tags {
+		fmt.Printf("\t%s:%s\n", GetFullRemoteAddr(config), tag)
+	}
+}
+
+func PushDockerImage(opts DockerReleaseOptions) error {
+	for _, tag := range opts.Tags {
+		tg := fmt.Sprintf("%s:%s", opts.RemoteAddr, tag)
+		cmd := exec.Command("docker", "push", tg)
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		if err := cmd.Start(); err != nil {
+			return err
+		}
+		if err := cmd.Wait(); err != nil {
+			return err
+		}
+	}
+	return nil
 }

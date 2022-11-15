@@ -119,6 +119,52 @@ func AddBuildArgs(config *DockerImageConfigFile) {
 	config.ImageSettings.Environment["VERSION"] = GetRepoTagVersion()
 }
 
+func ValidateRelease(config *DockerImageConfigFile, cmd *ReleaseCommand) error {
+	//validate imageName
+	if len(cmd.ImageName) > 0 {
+		config.ImageSettings.Name = cmd.ImageName
+	}
+	if len(config.ImageSettings.Name) == 0 {
+		return ErrInvalidImageName
+	}
+	//validate username
+	if len(cmd.UserName) > 0 {
+		config.ImageSettings.UserName = cmd.UserName
+	}
+	if len(config.ImageSettings.UserName) == 0 {
+		return ErrInvalidUserName
+	}
+	for _, reg := range config.Registries {
+		if reg.Name != cmd.Registry {
+			continue
+		}
+
+	}
+	//validate registry
+	for _, reg := range config.Registries {
+		if reg.Name == cmd.Registry {
+			config.RemoteAddr = reg.URL
+		}
+	}
+	if len(config.RemoteAddr) == 0 {
+		config.RemoteAddr = cmd.Registry
+	}
+	//validate latest
+	if cmd.LatestTag {
+		config.ImageSettings.Settings.Latest = true
+	}
+	// validate tags
+	if len(cmd.Tag) > 0 {
+		config.Tags = append(config.Tags, cmd.Tag)
+	}
+	if config.ImageSettings.Settings.Latest {
+		config.Tags = append(config.Tags, "latest")
+	}
+	if len(config.Tags) == 0 {
+		return ErrEmptyTags
+	}
+	return nil
+}
 func GetRepoTagVersion() string {
 	args1 := []string{"describe", "--tags", "--exact-match", "2>/dev/null"}
 	args2 := []string{"symbolic-ref", "-q", "--short", "HEAD"}
