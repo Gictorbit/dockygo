@@ -1,14 +1,14 @@
 # dockygo
 docker image builder for go micro services
 ## Installation
-you can build and install `dockygo` on your linux machine using builder script
+you can build and install `dockygo` on your linux machine using builder script.&nbsp;
 1- first clone the repository
 ```shell
 git clone "https://github.com/Gictorbit/dockygo.git"
 ```
 2- execute builder script
 ```shell
-cd dockygo && chmod +x builder.sh && ./build.sh
+cd dockygo && chmod +x build.sh && ./build.sh
 ```
 ## Usage
 ```shell
