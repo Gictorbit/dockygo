@@ -1,7 +1,7 @@
-# dockygo
+# Dockygo
 docker image builder for go micro services
 ## Installation
-you can build and install `dockygo` on your linux machine using builder script.&nbsp;
+you can build and install `dockygo` on your linux machine using builder script. <br/>
 1- first clone the repository
 ```shell
 git clone "https://github.com/Gictorbit/dockygo.git"
@@ -9,6 +9,30 @@ git clone "https://github.com/Gictorbit/dockygo.git"
 2- execute builder script
 ```shell
 cd dockygo && chmod +x build.sh && ./build.sh
+```
+## Config File Example
+by default `dockygo` looks for configuration file in current directory like `Dockerimg.yaml`. <br/>
+users can overwrite file options using command line flags
+```yaml
+image:
+  name: dockygo-api
+  username: dockygo
+  environment:
+    COMPANY_HOST: "github.com/dockygo"
+    GITHUB_TOKEN: "${GITHUB_TOKEN}" #looks for env variable
+  settings:
+    compress: true
+    latest: false
+    cache: false
+    http_proxy:
+    https_proxy:
+    no_proxy:
+  golang:
+    proxy: global #[golang,global,china] default:global
+    version: 1.19 #default: current installed version
+registries:
+  - name: local
+    url: reg.dockygo.com
 ```
 ## Usage
 ```shell

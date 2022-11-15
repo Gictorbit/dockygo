@@ -3,7 +3,7 @@ image:
   username: dockygo
   environment:
     COMPANY_HOST: "github.com/dockygo"
-    GITHUB_TOKEN: "${GITHUB_TOKEN}"
+    GITHUB_TOKEN: "${GITHUB_TOKEN}" #looks for env variable
   settings:
     compress: true
     latest: false
@@ -16,4 +16,4 @@ image:
     version: 1.19 #default: current installed version
 registries:
   - name: local
-    url: dockygo.local
+    url: reg.dockygo.com
