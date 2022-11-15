@@ -117,6 +117,7 @@ func AddBuildArgs(config *DockerImageConfigFile) {
 	if len(config.ImageSettings.Settings.HTTPSProxy) > 0 {
 		config.ImageSettings.Environment["HTTPS_PROXY"] = config.ImageSettings.Settings.HTTPSProxy
 	}
+	config.ImageSettings.Environment["VERSION"] = config.Tags[0]
 }
 
 func getGitVersion() string {
