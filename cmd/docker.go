@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os/exec"
 )
 
@@ -56,5 +57,18 @@ func BuildDockerImage(opts DockerBuildOptions) error {
 }
 
 func GetFullTag(config *DockerImageConfigFile) string {
-	return fmt.Sprintf("%s,%s,%s", config.RemoteAddr, config.ImageSettings.UserName, config.ImageSettings.Name)
+	return fmt.Sprintf("%s/%s/%s", config.RemoteAddr, config.ImageSettings.UserName, config.ImageSettings.Name)
+}
+
+func PrintBuildConfig(config *DockerImageConfigFile) {
+	log.Printf("remoteAddr: %s\n", config.RemoteAddr)
+	log.Printf("image name: %s\n", config.ImageSettings.Name)
+	log.Printf("compress: %v\n", config.ImageSettings.Settings.Compress)
+	log.Printf("cache: %v\n", config.ImageSettings.Settings.Cache)
+	log.Printf("go version: %s\n", config.ImageSettings.Golang.Version)
+	log.Printf("tags: %v\n", config.Tags)
+	log.Println("environments:")
+	for key, value := range config.ImageSettings.Environment {
+		fmt.Printf("\t%s: %s\n", key, value)
+	}
 }

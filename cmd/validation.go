@@ -89,7 +89,7 @@ func ValidateBuild(config *DockerImageConfigFile, cmd *BuildCommand) error {
 	for _, tg := range *cmd.Tags {
 		config.Tags = append(config.Tags, tg)
 	}
-	if gitVersion := getGitVersion(); len(gitVersion) > 0 && len(config.Tags) == 0 {
+	if gitVersion := GetRepoTagVersion(); len(gitVersion) > 0 && len(*cmd.Tags) == 0 {
 		config.Tags = append(config.Tags, gitVersion)
 	}
 	if config.ImageSettings.Settings.Latest {
@@ -117,16 +117,19 @@ func AddBuildArgs(config *DockerImageConfigFile) {
 	if len(config.ImageSettings.Settings.HTTPSProxy) > 0 {
 		config.ImageSettings.Environment["HTTPS_PROXY"] = config.ImageSettings.Settings.HTTPSProxy
 	}
-	config.ImageSettings.Environment["VERSION"] = config.Tags[0]
+	config.ImageSettings.Environment["VERSION"] = GetRepoTagVersion()
 }
 
-func getGitVersion() string {
-	cmd := []string{"describe", "--tags", "--exact-match", "2>/dev/null", "||",
-		"git", "symbolic-ref", "-q", "--short", "HEAD",
+func GetRepoTagVersion() string {
+	args1 := []string{"describe", "--tags", "--exact-match", "2>/dev/null"}
+	args2 := []string{"symbolic-ref", "-q", "--short", "HEAD"}
+	output, err := exec.Command("git", args1...).Output()
+	if err == nil && len(string(output)) > 0 {
+		return string(output)
 	}
-	output, err := exec.Command("git", cmd...).Output()
-	if err != nil {
-		return ""
+	output, err = exec.Command("git", args2...).Output()
+	if err == nil && len(string(output)) > 0 {
+		return string(output)
 	}
-	return string(output)
+	return ""
 }

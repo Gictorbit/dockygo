@@ -47,7 +47,7 @@ func MakeCommandLine() *DockyGoCmd {
 
 	buildCmd := &BuildCommand{
 		Command:    buildCommand,
-		ImageName:  buildCommand.Flag("name", "name of image").Short('n').String(),
+		ImageName:  buildCommand.Flag("name", "name of image").Short('n').Default("").String(),
 		Registry:   buildCommand.Flag("registry", "name or url of registry").Short('r').Required().String(),
 		UserName:   buildCommand.Flag("user", "registry username").Short('u').String(),
 		GoProxy:    buildCommand.Flag("goproxy", "set go mod proxy").Short('g').Default("golang").String(),

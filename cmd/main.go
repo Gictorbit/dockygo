@@ -19,7 +19,6 @@ func main() {
 			log.Fatal(err)
 		}
 	}
-	fmt.Printf("%+v\n*********\n", yamlConfig)
 	switch parsedCmd {
 	// build docker image
 	case dockyGoCmd.BuildCMD.Command.FullCommand():
@@ -27,6 +26,7 @@ func main() {
 			log.Fatal(err)
 		}
 		AddBuildArgs(yamlConfig)
+		PrintBuildConfig(yamlConfig)
 		dockerOpts := DockerBuildOptions{
 			BuildX:     true,
 			Tags:       yamlConfig.Tags,
@@ -42,5 +42,4 @@ func main() {
 	case dockyGoCmd.ReleaseCMD.Command.FullCommand():
 		fmt.Printf("%+v\n", dockyGoCmd.ReleaseCMD)
 	}
-
 }

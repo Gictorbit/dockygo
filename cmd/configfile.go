@@ -99,5 +99,6 @@ func GetYamlConfigFilePath() string {
 			return path
 		}
 	}
+	log.Println("Dockerfile.yaml not found using default settings")
 	return ""
 }
