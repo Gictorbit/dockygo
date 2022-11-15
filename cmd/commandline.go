@@ -44,7 +44,7 @@ func MakeCommandLine() *DockyGoCmd {
 	buildCommand := app.Command("build", "build docker image")
 	releaseCommand := app.Command("release", "release built image to registry")
 	app.HelpFlag.Short('h')
-
+	gitTag := GetRepoTagVersion()
 	buildCmd := &BuildCommand{Command: buildCommand}
 	buildCommand.Flag("name", "name of image").Short('n').Default("").StringVar(&buildCmd.ImageName)
 	buildCommand.Flag("registry", "name or url of registry").Short('r').Required().StringVar(&buildCmd.Registry)
@@ -57,11 +57,11 @@ func MakeCommandLine() *DockyGoCmd {
 	buildCommand.Flag("no-proxy", "set no proxy").Envar("no_proxy").StringVar(&buildCmd.NOProxy)
 	buildCommand.Flag("cache", "enable docker cache").Default("false").BoolVar(&buildCmd.Cache)
 	buildCommand.Flag("goversion", "specify go version").Default(GetGoVersion()).StringVar(&buildCmd.GoVersion)
-	buildCommand.Flag("tag", "docker image tag").Short('t').StringVar(&buildCmd.Tag)
+	buildCommand.Flag("tag", "docker image tag").Short('t').Default(gitTag).StringVar(&buildCmd.Tag)
 	buildCommand.Flag("latest", "build latest tag for image").Short('l').Default("false").BoolVar(&buildCmd.LatestTag)
 
 	releaseCmd := &ReleaseCommand{Command: releaseCommand}
-	releaseCommand.Flag("tag", "release image tag").Short('t').StringVar(&releaseCmd.Tag)
+	releaseCommand.Flag("tag", "release image tag").Short('t').Default(gitTag).StringVar(&releaseCmd.Tag)
 	releaseCommand.Flag("latest", "release latest tag for image").Short('l').Default("false").BoolVar(&releaseCmd.LatestTag)
 	releaseCommand.Flag("name", "name of image").Short('n').StringVar(&releaseCmd.ImageName)
 	releaseCommand.Flag("registry", "name or url of registry").Short('r').Required().StringVar(&releaseCmd.ImageName)

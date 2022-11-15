@@ -91,9 +91,6 @@ func ValidateBuild(config *DockerImageConfigFile, cmd *BuildCommand) error {
 	if len(cmd.Tag) > 0 {
 		config.Tags = append(config.Tags, cmd.Tag)
 	}
-	if gitVersion := GetRepoTagVersion(); len(gitVersion) > 0 && len(cmd.Tag) == 0 {
-		config.Tags = append(config.Tags, gitVersion)
-	}
 	if config.ImageSettings.Settings.Latest {
 		config.Tags = append(config.Tags, "latest")
 	}
