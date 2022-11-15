@@ -1,5 +1,12 @@
 # Dockygo
 docker image builder for go micro services
+### Features:
++ use `buildx`/`buildkit` to build docker images
+- reduce docker image size using `upx` to compress `go` binary
++ supports multistage build
+- supports yaml config file
++ registry management
+- supports `http`/`https` proxy
 ## Installation
 you can build and install `dockygo` on your linux machine using builder script. <br/>
 1- first clone the repository
