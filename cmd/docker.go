@@ -2,11 +2,9 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"log"
 	"os"
 	"os/exec"
-	"sync"
 )
 
 type DockerBuildOptions struct {
@@ -42,27 +40,11 @@ func (dbo *DockerBuildOptions) BuildCommand() *exec.Cmd {
 
 func BuildDockerImage(opts DockerBuildOptions) error {
 	cmd := opts.BuildCommand()
-	stdout, _ := cmd.StdoutPipe()
-	stderr, _ := cmd.StderrPipe()
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 	if err := cmd.Start(); err != nil {
 		return err
 	}
-	var wg sync.WaitGroup
-
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		io.Copy(os.Stdout, stdout)
-	}()
-
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		io.Copy(os.Stderr, stderr)
-	}()
-
-	wg.Wait()
-
 	if err := cmd.Wait(); err != nil {
 		return err
 	}
