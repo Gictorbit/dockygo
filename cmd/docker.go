@@ -1,10 +1,12 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
+	"io"
 	"log"
+	"os"
 	"os/exec"
+	"sync"
 )
 
 type DockerBuildOptions struct {
@@ -40,19 +42,31 @@ func (dbo *DockerBuildOptions) BuildCommand() *exec.Cmd {
 
 func BuildDockerImage(opts DockerBuildOptions) error {
 	cmd := opts.BuildCommand()
+	stdout, _ := cmd.StdoutPipe()
 	stderr, _ := cmd.StderrPipe()
 	if err := cmd.Start(); err != nil {
 		return err
 	}
-	scanner := bufio.NewScanner(stderr)
-	scanner.Split(bufio.ScanWords)
-	for scanner.Scan() {
-		m := scanner.Text()
-		fmt.Println(m)
-	}
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		io.Copy(os.Stdout, stdout)
+	}()
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		io.Copy(os.Stderr, stderr)
+	}()
+
+	wg.Wait()
+
 	if err := cmd.Wait(); err != nil {
 		return err
 	}
+
 	return nil
 }
 
