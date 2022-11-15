@@ -4,6 +4,7 @@ import (
 	"errors"
 	"os/exec"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -125,11 +126,11 @@ func GetRepoTagVersion() string {
 	args2 := []string{"symbolic-ref", "-q", "--short", "HEAD"}
 	output, err := exec.Command("git", args1...).Output()
 	if err == nil && len(string(output)) > 0 {
-		return string(output)
+		return strings.TrimSuffix(string(output), "\n")
 	}
 	output, err = exec.Command("git", args2...).Output()
 	if err == nil && len(string(output)) > 0 {
-		return string(output)
+		return strings.TrimSuffix(string(output), "\n")
 	}
 	return ""
 }
