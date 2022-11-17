@@ -24,6 +24,8 @@ type BuildCommand struct {
 	GoVersion  string
 	Tag        string
 	LatestTag  bool
+	NoBuildX   bool
+	Push       bool
 }
 
 type ReleaseCommand struct {
@@ -63,7 +65,8 @@ func MakeCommandLine() *DockyGoCmd {
 	buildCommand.Flag("goversion", "specify go version").Default(GetGoVersion()).StringVar(&buildCmd.GoVersion)
 	buildCommand.Flag("tag", "docker image tag").Short('t').Default(gitTag).StringVar(&buildCmd.Tag)
 	buildCommand.Flag("latest", "build latest tag for image").Short('l').Default("false").BoolVar(&buildCmd.LatestTag)
-
+	buildCommand.Flag("nobuildx", "disable buildx mode").Default("false").BoolVar(&buildCmd.NoBuildX)
+	buildCommand.Flag("push", "push built images to registry").Short('p').BoolVar(&buildCmd.Push)
 	releaseCmd := &ReleaseCommand{Command: releaseCommand}
 	releaseCommand.Flag("tag", "release image tag").Short('t').Default(gitTag).StringVar(&releaseCmd.Tag)
 	releaseCommand.Flag("latest", "release latest tag for image").Short('l').Default("false").BoolVar(&releaseCmd.LatestTag)

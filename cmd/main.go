@@ -37,6 +37,16 @@ func main() {
 		if err := BuildDockerImage(dockerOpts); err != nil {
 			log.Fatal(err)
 		}
+		if dockyGoCmd.BuildCMD.Push {
+			PrintReleaseConfig(yamlConfig)
+			releaseOpts := DockerReleaseOptions{
+				Tags:       yamlConfig.Tags,
+				RemoteAddr: GetFullRemoteAddr(yamlConfig),
+			}
+			if err := PushDockerImage(releaseOpts); err != nil {
+				log.Fatal(err)
+			}
+		}
 	case dockyGoCmd.ReleaseCMD.Command.FullCommand():
 		if err := ValidateRelease(yamlConfig, dockyGoCmd.ReleaseCMD); err != nil {
 			log.Fatal(err)
