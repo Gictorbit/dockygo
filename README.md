@@ -68,6 +68,7 @@ build docker image
 
 Flags:
   -h, --help                     Show context-sensitive help (also try --help-long and --help-man).
+  -v, --version                  Show application version.
   -n, --name=""                  name of image
   -r, --registry=REGISTRY        name or url of registry
   -u, --user=USER                registry username
@@ -79,8 +80,11 @@ Flags:
       --no-proxy=NO-PROXY        set no proxy
       --cache                    enable docker cache
       --goversion="1.19"         specify go version
-  -t, --tag="v1.0.1"             docker image tag
+  -t, --tag="v1.0.5"             docker image tag
   -l, --latest                   build latest tag for image
+      --nobuildx                 disable buildx mode
+  -p, --push                     push built images to registry
+
 ```
 ### Release
 use release command to push your built docker image to registry

@@ -27,7 +27,7 @@ func main() {
 		AddBuildArgs(yamlConfig)
 		PrintBuildConfig(yamlConfig)
 		dockerOpts := DockerBuildOptions{
-			BuildX:     true,
+			BuildX:     dockyGoCmd.BuildCMD.NoBuildX == false,
 			Tags:       yamlConfig.Tags,
 			RemoteAddr: GetFullRemoteAddr(yamlConfig),
 			Dockerfile: dockyGoCmd.BuildCMD.DockerFile,
