@@ -7,6 +7,8 @@ import (
 	"regexp"
 )
 
+var Version = "development"
+
 type BuildCommand struct {
 	Command    *clipkg.CmdClause
 	ImageName  string
@@ -44,6 +46,8 @@ func MakeCommandLine() *DockyGoCmd {
 	buildCommand := app.Command("build", "build docker image")
 	releaseCommand := app.Command("release", "release built image to registry")
 	app.HelpFlag.Short('h')
+	app.Version(Version)
+	app.VersionFlag.Short('v')
 	gitTag := GetRepoTagVersion()
 	buildCmd := &BuildCommand{Command: buildCommand}
 	buildCommand.Flag("name", "name of image").Short('n').Default("").StringVar(&buildCmd.ImageName)
