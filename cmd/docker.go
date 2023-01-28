@@ -38,6 +38,7 @@ func (dbo *DockerBuildOptions) BuildCommand() *exec.Cmd {
 	if !dbo.Cache {
 		flags = append(flags, "--no-cache")
 	}
+	flags = append(flags, "-f", dbo.Dockerfile)
 	flags = append(flags, "--network", "host", ".")
 	return exec.Command("docker", flags...)
 }
